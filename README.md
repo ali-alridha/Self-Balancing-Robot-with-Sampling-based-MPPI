@@ -21,7 +21,8 @@ General process flow to calculate optimal input with mppi algorithm goes as:
 **[Step 1]** ramdomly sample input sequence
 
 Mean input sequence $U$ and ramdomly sampled input sequence $V$ are defined as follows.  
-Usually, optimal input sequence on the previous step is used as $U$. 
+Usually, optimal input sequence on the previous step is used as $U$.
+```math
 $$
     \begin{align}
         & (\mathbf{u}_0, \mathbf{u}_1, ... \mathbf{u}_{T-1}) = U \in \mathbb{R}^{m \times T}, \nonumber \\
@@ -30,20 +31,23 @@ $$
         & \epsilon_t \sim \mathcal{N}(0, \Sigma).\nonumber 
     \end{align}
 $$
-
+```
 
 **[Step 2]** predict future states and evaluate cost for each sample
 
 We assume a discrete time, continuous state-action dynamical system as a control target.  
 $\mathbf{x}$ is a system state, and $\mathbf{v}$ is a sampled control input.
+```math
 $$
 \begin{align}
 \mathbf{x}_t  &\in \mathbb{R}^{n}, \nonumber \\
 \mathbf{x}_{t+1} &= \mathbf{F}(\mathbf{x}_t, \mathbf{v}_t).\nonumber 
 \end{align}
 $$
+```
 
 Then costs (i.e. penalties to be minimized) for sampled sequences $S(V; \mathbf{x}_0)$ can be evaluated with following formulations.
+```math
 $$
     \begin{align}
         & S(V; \mathbf{x}_0) = C(\mathcal{H}(V; \mathbf{x}_0)), \nonumber \\
@@ -51,13 +55,14 @@ $$
         & \mathcal{H}(V; \mathbf{x}_0) = \left( \mathbf{x}_0, \mathbf{F}(\mathbf{x}_0, \mathbf{v}_0), \mathbf{F}(\mathbf{F}(\mathbf{x}_0, \mathbf{v}_0), \mathbf{v}_1), ... \right).\nonumber 
     \end{align}
 $$
+```
 
 **[Step 3]** calculate weight for each sample sequence
 
 Weight for a each sample sequence is derived on the basis of information theory.  
 There are K sample sequences in total, represented with an index k.  
 Good control sequence with small cost value get more weight, and vice versa.  
-
+```math
 $$
 \begin{align}
 & w(V) = \frac{1}{\eta} \exp
@@ -80,20 +85,20 @@ $$
 \left( S(V_k) + \lambda(1-\alpha) \sum^{T-1}_{t=0} \mathbf{u}_t^T \Sigma^{-1} (\mathbf{u}_t + \epsilon_t^k) \right)\nonumber
 \end{align}
 $$
-
+```
 Note that $\rho$ is inserted into the formulation to avoid overflow errors during implementation.
 
 **[Step 4]** get optimal control input sequence
 
 Finally, optimal input trajectory for the next ($i+1$) step is given adding weighted sample sequences to the previous solution.
-
+```math
 $$
 \begin{align}
     \mathbf{u}_t^{i+1} % &= \mathbb{E}_{\mathbb{Q}_{\hat{U}, \Sigma}}[w(V)\mathbf{v}_t]
                  = u_t^i + \sum_{k=1}^K w(V_k) \epsilon_t^k \nonumber 
 \end{align}
 $$
-
+```
 
 
 
