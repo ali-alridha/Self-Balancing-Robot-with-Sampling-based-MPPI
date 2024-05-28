@@ -1,4 +1,4 @@
-# Self-balanced differential robot with sampling-based Model Predictive Control(MPC)
+# Self-balanced differential robot with Sampling-Based Model Predictive Control (SBMPC)
 
 #### Project for the course of Advanced Control Methods at Skoltech, Prof. Pavel Oseninko.
 
